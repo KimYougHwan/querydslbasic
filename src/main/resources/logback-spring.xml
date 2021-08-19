@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds">
+	<!-- log file path -->
+	<property name="LOG_PATH" value="./log/local" />
+	<!-- log file name -->
+	<property name="LOG_FILE_NAME" value="data.log" />
+	<!-- pattern -->
+	<property name="LOG_PATTERN"
+		value="%d{HH:mm:ss.SSS} [%-5level] [%logger{36}] - %m%n" />
+
+	
+	<springProfile name="local, development">
+		<appender name="CONSOLE"
+			class="ch.qos.logback.core.ConsoleAppender">
+			<layout class="ch.qos.logback.classic.PatternLayout">
+				<Pattern>${LOG_PATTERN}</Pattern>
+				<!--%-5level %d{yy-MM-dd HH:mm:ss}[%thread] [%logger{0}:%line] - %msg%n -->
+			</layout>
+		</appender>
+	</springProfile>
+
+	<springProfile name="quality, product">
+		<appender name="FILE"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+			<encoder
+				class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+				<pattern>${LOG_PATTERN}</pattern>
+			</encoder>
+			<rollingPolicy
+				class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.zip
+				</fileNamePattern>
+				<timeBasedFileNamingAndTriggeringPolicy
+					class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+					<maxFileSize>30MB</maxFileSize>
+				</timeBasedFileNamingAndTriggeringPolicy>
+			</rollingPolicy>
+		</appender>
+	</springProfile>
+
+	<root level="DEBUG">
+		<springProfile name="local, development">
+			<appender-ref ref="CONSOLE" />
+		</springProfile>
+		<springProfile name="quality, product">
+			<appender-ref ref="FILE" />
+		</springProfile>
+	</root>
+</configuration>

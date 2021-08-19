@@ -1,0 +1,34 @@
+= Walkon RESTful Notes API Guide
+:doctype: walkon/challenge
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectnums:
+:sectlinks:
+:sectanchors:
+
+[[walkon challenage API]]
+
+본 REST API는 walkon 서비스에서 제공하는 서비스입니다.
+
+== [사용자 아이디 요청]
+operation::walkon/challenge/user/find-challenge-user-id-by-phone-number-test[snippets='http-request,request-parameters,response-body,response-fields']
+
+== [챌린지 정보 요청]
+operation::walkon/challenge/find-challenge-information-by-api-key-and-challenge-id-test[snippets='http-request,request-parameters,response-body,response-fields']
+
+== [챌린지 참여 여부]
+operation::walkon/challenge/find-challenge-participation-status-by-api-key-and-challenge-id-and-uuid-test[snippets='http-request,request-parameters,response-body,response-fields']
+
+== [관련 챌린지 리스트]
+operation::walkon/challenge/find-challenges-by-api-key-test[snippets='http-request,request-parameters,response-body,response-fields']
+
+== [챌린지 누적 걸음 수]
+operation::walkon/challenge/find-challenge-total-steps-by-api-key-and-challenge-id-and-uuid-test[snippets='http-request,request-parameters,response-body,response-fields']
+
+== [챌린지 참여 리스트]
+operation::walkon/challenge/find-participation-challenges-by-apikey-and-uuid-test[snippets='http-request,request-parameters,response-body,response-fields']
+
+== [RESPONSE CODE]
+operation::walkon/common/[snippets='custom-response-fields-apiResponseSuccessCodes,custom-response-fields-apiResponseFailCodes']

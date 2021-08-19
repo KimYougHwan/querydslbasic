@@ -1,0 +1,48 @@
+CREATE TABLE `customer_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) DEFAULT NULL,
+  `user_id` varchar(45) DEFAULT NULL,
+  `creator` varchar(25) NOT NULL DEFAULT 'API-SYSTEM',
+  `create_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `index_customer_user_id_customer_id_user_id` (`id`,`customer_id`,`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+CREATE TABLE `customer` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL COMMENT '고객명',
+  `display_name` varchar(150) DEFAULT NULL COMMENT '보여줄 이름',
+  `phone1` varchar(11) DEFAULT NULL COMMENT '전화번호1',
+  `phone2` varchar(11) DEFAULT NULL COMMENT '전화번호2',
+  `phone3` varchar(11) DEFAULT NULL COMMENT '전화번호3',
+  `business_type` tinyint(1) NOT NULL COMMENT '0 : 개인 사업자\n1 : 법인',
+  `business_number` varchar(10) DEFAULT NULL,
+  `corporation number` varchar(15) DEFAULT NULL COMMENT '법인 번호',
+  `creator` varchar(15) DEFAULT NULL COMMENT '입력자',
+  `create_date` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '입력한 날짜',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='고객 DB';
+
+
+CREATE TABLE `open_rest_api_key` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `key` varchar(100) NOT NULL COMMENT 'api_key',
+  `limit` int(11) NOT NULL COMMENT '한도',
+  `creator` varchar(45) NOT NULL COMMENT '작성자\n',
+  `create_date` datetime NOT NULL COMMENT '작성일자\n',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='open_rest_api_key 관리 테이블';
+
+ALTER TABLE `walkon`.`CHALLENGE_MASTER` 
+ADD COLUMN `CUSTOMER_ID` INT NULL AFTER `CHALLENGE_ATTEND_COUNT`;
+
+
+ALTER TABLE `walkon`.`CHALLENGE_MASTER` 
+CHANGE COLUMN `CUSTOMER_ID` `CUSTOMER_ID` INT(11) NULL COMMENT '고객사_id' ,
+ADD INDEX `index_challenge_master_customer_id` (`CUSTOMER_ID` ASC);
+
+
