@@ -33,10 +33,6 @@ spring:
     activate:
       on-profile:
       - localDB
-#  r2dbc:
-#    url: "r2dbcs:mysql://127.0.0.1:3306/walkon"
-#    username: walkon
-#    password: superwallaby
 
   flyway:
     enabled: false
