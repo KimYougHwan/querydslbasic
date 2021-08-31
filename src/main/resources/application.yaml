@@ -1,4 +1,8 @@
-spring:  profiles:    default: local    active:    - "@active.profile@"
+spring:
+  profiles:
+    default: local
+    active:
+    - "@active.profile@"
 ---
 spring:
   profiles:
@@ -6,27 +10,229 @@ spring:
       local: "localDB, common"
 ---
 
-spring:  profiles:    group:      development: "developmentDB, common"
+spring:
+  profiles:
+    group:
+      development: "developmentDB, common"
 ---
 
-spring:  profiles:    group:      quality: "stagingDB, common"
+spring:
+  profiles:
+    group:
+      quality: "stagingDB, common"
 ---
 
-spring:  profiles:    group:      product: "productDB, common"
+spring:
+  profiles:
+    group:
+      product: "productDB, common"
 ---
 
-spring:  config:    activate:      on-profile:      - localDB#  r2dbc:#    url: "r2dbcs:mysql://127.0.0.1:3306/walkon"#    username: walkon#    password: superwallaby  flyway:    enabled: false    locations: classpath:db/migration/walkon # 마이그레이션 스크립트 위치    baseline-version: LATEST # 마이그레이션을 시작할 번호    datasource:    type: com.zaxxer.hikari.HikariDataSource    hikari:      pool-name: walkon-local      driver-class-name: com.mysql.cj.jdbc.Driver #org.mysql.cj.jdbc.Driver      jdbc-url: jdbc:mysql://127.0.0.1:3306/walkon?useUnicode=true&characterEncoding=UTF-8&TimezoneUTC&useSSL=false      username: walkon      password: superwallaby      connection-timeout: 7000      maximum-pool-size: 10      minimum-idle: 10      max-lifetime: 47000      auto-commit: true      jpa:    database: mysql    show-sql: true    open-in-view: false    generate-ddl: false    hibernate:      naming:        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl      ddl-auto: none    properties:      hibernate:        '[dialect]': com.swallaby.openrestapi.config.MysqlCustomDialect        '[show_sql]': true        '[format_sql]': true        '[use_sql_comments]': true        '[cache]':           '[user_second_level_cache]': true          '[region]':            '[factory_class]': org.hibernate.cache.jcache.internal.JCacheRegionFactory        '[temp]':          '[use_jdbc_metadata_defaults]': false      javax:        persistence:          sharedcache:             mode: ENABLE_SELECTIVE  cache:    jcache:      config: classpath:ehcache.xml#  url: jdbc:h2:file:~/.database/flywaydb;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE;  # Flyway 소유의 데이터소스를 생성하려고 하는 경우 사용#  user: sa # Flyway 소유의 데이터소스를 생성하려고 하는 경우 사용#  password: # Flyway 소유의 데이터소스를 생성하려고 하는 경우 사용env:  r2dbc:    host: 127.0.0.1    port: 3306    username: walkon    password: superwallaby    database: walkon#    pool:#      enabled: true
+spring:
+  config:
+    activate:
+      on-profile:
+      - localDB
+#  r2dbc:
+#    url: "r2dbcs:mysql://127.0.0.1:3306/walkon"
+#    username: walkon
+#    password: superwallaby
+
+  flyway:
+    enabled: false
+    locations: classpath:db/migration/walkon # 마이그레이션 스크립트 위치
+    baseline-version: LATEST # 마이그레이션을 시작할 번호
+  
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: walkon-local
+      driver-class-name: com.mysql.cj.jdbc.Driver #org.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/walkon?useUnicode=true&characterEncoding=UTF-8&TimezoneUTC&useSSL=false
+      username: root
+      password: root
+      connection-timeout: 7000
+      maximum-pool-size: 10
+      minimum-idle: 10
+      max-lifetime: 47000
+      auto-commit: true
+    
+  jpa:
+    database: mysql
+    show-sql: true
+    open-in-view: false
+    generate-ddl: false
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+      ddl-auto: none
+    properties:
+      hibernate:
+        '[dialect]': com.swallaby.openrestapi.config.MysqlCustomDialect
+        '[show_sql]': true
+        '[format_sql]': true
+        '[use_sql_comments]': true
+        '[cache]': 
+          '[user_second_level_cache]': true
+          '[region]':
+            '[factory_class]': org.hibernate.cache.jcache.internal.JCacheRegionFactory
+        '[temp]':
+          '[use_jdbc_metadata_defaults]': false
+      javax:
+        persistence:
+          sharedcache: 
+            mode: ENABLE_SELECTIVE
+
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+#  url: jdbc:h2:file:~/.database/flywaydb;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE;  # Flyway 소유의 데이터소스를 생성하려고 하는 경우 사용
+#  user: sa # Flyway 소유의 데이터소스를 생성하려고 하는 경우 사용
+#  password: # Flyway 소유의 데이터소스를 생성하려고 하는 경우 사용
+
+env:
+  r2dbc:
+    host: 127.0.0.1
+    port: 3306
+    username: root
+    password: password
+    database: test
+#    pool:
+#      enabled: true
 #      initial-size: 1
 #      max-size: 1
-#      validation-depth: localserver:  port: 8081     
+#      validation-depth: local
+server:
+  port: 8081     
           
-logging:  level:
-    root: debug    '[org.springframework.r2dbc]': debug    '[com.swallaby.openrestapi]': debug#    '[io.r2dbc.spi]': error#    '[dev.miku.r2dbc]': error    '[org.hibernate.type.descriptor]': trace             
-wavefront:  application:    name: walkon    service: walkon-open-rest-api
-management:  endpoints:    web:      exposure:        include:        - health        - info        - prometheus          metrics:    export:      wavefront:        enabled: true        api-token: c5a6fa47-acfd-4498-93ea-ca83aeb29cb3        uri: https://wavefront.surf#https://wavefront.surf/us/yXMD42q05V---
+logging:
+  level:
+    root: debug
+    '[org.springframework.r2dbc]': debug
+    '[com.swallaby.openrestapi]': debug
+#    '[io.r2dbc.spi]': error
+#    '[dev.miku.r2dbc]': error
+    '[org.hibernate.type.descriptor]': trace
+             
+wavefront:
+  application:
+    name: walkon
+    service: walkon-open-rest-api
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - health
+        - info
+        - prometheus
+        
+  metrics:
+    export:
+      wavefront:
+        enabled: true
+        api-token: c5a6fa47-acfd-4498-93ea-ca83aeb29cb3
+        uri: https://wavefront.surf
+#https://wavefront.surf/us/yXMD42q05V
+---
 
-spring:  pid:    file: open-rest-api.pid    config:    activate:
-      on-profile:      - developmentDB
-  datasource:    type: com.zaxxer.hikari.HikariDataSource    hikari:      pool-name: walkon-dev      driver-class-name: com.mysql.cj.jdbc.Driver #org.mysql.cj.jdbc.Driver      jdbc-url: jdbc:mysql://walkon-dev-3.civtot0rmgfe.ap-northeast-1.rds.amazonaws.com/walkon?autoReconnect=true      username: walkon-dev      password: superwallaby      connection-timeout: 7000      maximum-pool-size: 10      minimum-idle: 10      max-lifetime: 47000      auto-commit: true      validation-timeout: 7000      connection-init-sql: set wait_timeout = 600            jpa:    database: mysql    show-sql: true    open-in-view: false    generate-ddl: false    hibernate:      naming:        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl      ddl-auto: none    properties:      hibernate:        '[dialect]': com.swallaby.openrestapi.config.MysqlCustomDialect        '[show_sql]': true        '[format_sql]': true        '[use_sql_comments]': true        '[cache]':           '[user_second_level_cache]': true          '[region]':            '[factory_class]': org.hibernate.cache.jcache.internal.JCacheRegionFactory        '[temp]':          '[use_jdbc_metadata_defaults]': false      javax:        persistence:          sharedcache:             mode: ENABLE_SELECTIVE  cache:    jcache:      config: classpath:ehcache.xml#  url: jdbc:h2:file:~/.database/flywaydb;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE;  # Flyway 소유의 데이터소스를 생성하려고 하는 경우 사용#  user: sa # Flyway 소유의 데이터소스를 생성하려고 하는 경우 사용#  password: # Flyway 소유의 데이터소스를 생성하려고 하는 경우 사용env:  r2dbc:    host: 127.0.0.1    port: 3306    username: walkon    password: superwallaby    database: walkon#    pool:#      enabled: true#      initial-size: 1#      max-size: 1#      validation-depth: localserver:  port: 8081               logging:  level:    root: info    '[org.springframework.r2dbc]': debug    '[com.swallaby.openrestapi]': debug#    '[io.r2dbc.spi]': error#    '[dev.miku.r2dbc]': error    '[org.hibernate.type.descriptor]': trace             wavefront:  application:    name: walkon    service: walkon-open-rest-apimanagement:  endpoints:    web:      exposure:        include:        - health        - info        - prometheus          metrics:    export:      wavefront:        enabled: true        api-token: a73ffc94-5a19-4ff9-9dae-23640cacc3b3        uri: https://wavefront.surf    
+spring:
+  pid:
+    file: open-rest-api.pid  
+  config:
+    activate:
+      on-profile:
+      - developmentDB
+
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: walkon-dev
+      driver-class-name: com.mysql.cj.jdbc.Driver #org.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://본인 url
+      username: root
+      password: root
+      connection-timeout: 7000
+      maximum-pool-size: 10
+      minimum-idle: 10
+      max-lifetime: 47000
+      auto-commit: true
+      validation-timeout: 7000
+      connection-init-sql: set wait_timeout = 600
+      
+    
+  jpa:
+    database: mysql
+    show-sql: true
+    open-in-view: false
+    generate-ddl: false
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+      ddl-auto: none
+    properties:
+      hibernate:
+        '[dialect]': com.swallaby.openrestapi.config.MysqlCustomDialect
+        '[show_sql]': true
+        '[format_sql]': true
+        '[use_sql_comments]': true
+        '[cache]': 
+          '[user_second_level_cache]': true
+          '[region]':
+            '[factory_class]': org.hibernate.cache.jcache.internal.JCacheRegionFactory
+        '[temp]':
+          '[use_jdbc_metadata_defaults]': false
+      javax:
+        persistence:
+          sharedcache: 
+            mode: ENABLE_SELECTIVE
+
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+#  url: jdbc:h2:file:~/.database/flywaydb;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE;  # Flyway 소유의 데이터소스를 생성하려고 하는 경우 사용
+#  user: sa # Flyway 소유의 데이터소스를 생성하려고 하는 경우 사용
+#  password: # Flyway 소유의 데이터소스를 생성하려고 하는 경우 사용
+
+env:
+  r2dbc:
+    host: 127.0.0.1
+    port: 3306
+    username: root
+    password: password
+    database: test
+#    pool:
+#      enabled: true
+#      initial-size: 1
+#      max-size: 1
+#      validation-depth: local
+server:
+  port: 8081     
+          
+logging:
+  level:
+    root: info
+    '[org.springframework.r2dbc]': debug
+    '[com.swallaby.openrestapi]': debug
+#    '[io.r2dbc.spi]': error
+#    '[dev.miku.r2dbc]': error
+    '[org.hibernate.type.descriptor]': trace
+             
+wavefront:
+  application:
+    name: walkon
+    service: walkon-open-rest-api
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - health
+        - info
+        - prometheus
+
+    
     
     
